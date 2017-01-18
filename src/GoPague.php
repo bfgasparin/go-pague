@@ -3,7 +3,11 @@
 namespace GoPague;
 
 use GoPague\Credential;
+use GoPague\Exceptions\GoPagueException;
 use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Request;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * GoPague API Wrapper
@@ -53,17 +57,12 @@ class GoPague
         $body = [
             'user' => ['email' => $email, 'password' => $password]
         ];
-        
-        $content = $this->requestServer('post', [
-            self::API_ENDPOINT . '/users/login',
-            [
-               'body' => json_encode($body),
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                    'ACCEPT' => 'version=2',
-                ],
-            ]
-        ]);
+
+        $content = $this->requestServer(
+            'post',
+            self::API_ENDPOINT . '/users/sign_in',
+            json_encode($body)
+        );
 
         return new Credential($content);
     }
@@ -100,17 +99,24 @@ class GoPague
         return $this->requestServer($method, $parameters);
     }
 
-    protected function requestServer($method, $parameters)
+    protected function requestServer($method, $url, $body)
     {
-        $response = call_user_func_array([$this->httpClient, $method], $parameters);
+        $headers = [
+            'Content-Type' => 'application/json',
+            'ACCEPT' => 'version=1',
+        ];
 
-        if (!in_array($response->getStatusCode(), [200, 201])) {
-            throw GoPagueException::serviceRespondedWithAnError($response);
+        $request = new Request($method, $url, $headers, $body);
+
+        try {
+            $response = $this->httpClient->send($request, ['auth' => ['admin@pag.net', 'pagnet2017']]);
+
+            return json_decode(
+                $response->getBody()->getContents(),
+                true
+            );
+        } catch (RequestException $e) {
+            throw GoPagueException::serviceRespondedWithAnError($e->getRequest(), $e->getResponse(), $e);
         }
-
-        return json_decode(
-            $response->getBody()->getContents(),
-            true
-        );
     }
 }
