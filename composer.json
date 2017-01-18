@@ -1,0 +1,25 @@
+{
+    "name": "go-pague/go-pague-php",
+    "description": "Go Pague PHP Library",
+    "keywords": ["gopague", "library"],
+    "type": "library",
+    "require-dev": {
+        "phpunit/phpunit": "^5.7"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "GoPague\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Bruno Ferme Gasparin",
+            "email": "bfgasparin@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.1",
+        "guzzlehttp/guzzle": "~6.0" 
+    }
+}
