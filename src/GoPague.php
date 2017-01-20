@@ -4,7 +4,7 @@ namespace GoPague;
 
 use GoPague\Credential;
 use GoPague\Exceptions\ResourceNotFoundException;
-use GoPague\Exceptions\ServerCommunicationException;
+use GoPague\Exceptions\RequestException as GoPagueRequestException;
 use GoPague\Exceptions\ValidationException;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\ConnectException;
@@ -210,17 +210,19 @@ class GoPague
 
             if ($response->getStatusCode() == 422) {
                 throw new ValidationException(
-                    $content['message']
-                );
+                    $content['message'],
+                    $e->getRequest(),
+                    $e->getResponse(),
+            x    );
             } elseif ($response->getStatusCode() == 404) {
-                throw new ResourceNotFoundException($e->getMessage());
+                throw new ResourceNotFoundException($e->getMessage(), $e->getRequest(), $e->getResponse());
             }
-            throw ServerCommunicationException::serviceRespondedWithAnError($e->getRequest(), $e->getResponse(), $e);
+            throw GoPagueRequestException::serviceRespondedWithAnError($e->getRequest(), $e->getResponse(), $e);
         } catch (ConnectException $e) {
-            throw ServerCommunicationException::couldNotConnectToService($e->getRequest(), $e);
+            throw GoPagueRequestException::couldNotConnectToService($e->getRequest(), $e);
         } catch (RequestException $e) {
             var_dump($e->getRequest()->getHeaders());
-            throw ServerCommunicationException::serviceRespondedWithAnError($e->getRequest(), $e->getResponse(), $e);
+            throw GoPagueRequestException::serviceRespondedWithAnError($e->getRequest(), $e->getResponse(), $e);
         }
     }
 
