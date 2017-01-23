@@ -1,5 +1,5 @@
 {
-    "name": "go-pague/go-pague-php",
+    "name": "gopague/gopague-php",
     "description": "Go Pague PHP Library",
     "keywords": ["gopague", "library"],
     "type": "library",

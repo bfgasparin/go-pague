@@ -9,7 +9,7 @@ PHP 7.0.1 and later.
 You can install the bindings via [Composer](http://getcomposer.org/). Run the following command:
 
 ```bash
-composer require go-pague/go-pague-php
+composer require gopague/gopague-php
 ```
 
 To use the go pague classes, use Composer's [autoload](https://getcomposer.org/doc/00-intro.md#autoloading):
