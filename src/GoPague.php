@@ -225,7 +225,6 @@ class GoPague
         // make the request
         try {
             $request = new Request($method, $uri, $headers, $body);
-            var_dump($request->getHeaders());
             $response = $this->httpClient->send($request, $options);
             
             return json_decode(
@@ -249,7 +248,6 @@ class GoPague
         } catch (ConnectException $e) {
             throw GoPagueRequestException::couldNotConnectToService($e->getRequest(), $e);
         } catch (RequestException $e) {
-            var_dump($e->getRequest()->getHeaders());
             throw GoPagueRequestException::serviceRespondedWithAnError($e->getRequest(), $e->getResponse(), $e);
         }
     }
