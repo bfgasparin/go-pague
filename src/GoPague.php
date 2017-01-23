@@ -26,13 +26,15 @@ use Psr\Http\Message\ResponseInterface;
  */
 class GoPague
 {
+    const BASE_URI = 'http://portal-staging.redepagnet.com/api/';
+
     protected $httpClient;
     protected $credential;
 
     protected static $email;
     protected static $password;
 
-    protected static $baseUri = 'http://portal-staging.redepagnet.com/api/';
+    protected static $httpConfig = null;
 
     /**
      * @var array  Credenciais for GoPague Staging environment
@@ -91,6 +93,19 @@ class GoPague
     }
 
     /**
+     * Set Http Config from Guzzle Client
+     *
+     * @see GuzzleHttp\Client
+     *
+     * @param string $baseUri
+     * @return self
+     */
+    public static function setHttpConfig(array $config)
+    {
+        static::$httpConfig = $config;
+    }
+
+    /**
      * Login to Go Pague API with the given parameters.
      * If success the authenticated token is achieved with
      * self::credencials()
@@ -142,11 +157,12 @@ class GoPague
      */
     public static function login(string $email, string $password) : Credential
     {
-        static::$instance = new static(
-            new HttpClient(
-                ['base_uri' => static::$baseUri]
-            )
-        );
+        $httpConfig = is_null(static::$httpConfig) ?
+            ['base_uri' => self::BASE_URI] :
+            static::$httpConfig
+        ;
+
+        static::$instance = new static(new HttpClient($httpConfig));
 
         return static::$instance->attemptLogin($email, $password);
     }
@@ -224,8 +240,8 @@ class GoPague
                 throw new ValidationException(
                     $content['message'],
                     $e->getRequest(),
-                    $e->getResponse(),
-            x    );
+                    $e->getResponse()
+                );
             } elseif ($response->getStatusCode() == 404) {
                 throw new ResourceNotFoundException($e->getMessage(), $e->getRequest(), $e->getResponse());
             }
