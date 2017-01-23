@@ -4,8 +4,8 @@ namespace GoPague;
 
 class Bank extends Resource
 {
-    public static function all()
+    public static function all() : array
     {
-        return static::request('get', 'banks');
+        return static::requestAll('banks');
     }
 }
