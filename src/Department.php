@@ -2,7 +2,7 @@
 
 namespace GoPague;
 
-class Department extends Model
+class Department extends Resource
 {
     public static function all() : array
     {

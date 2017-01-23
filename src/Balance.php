@@ -5,8 +5,8 @@ namespace GoPague;
 /**
  * Represents a GoPague Balance
  *
- * @see Model
+ * @see Resource
  */
-class Balance extends Model
+class Balance extends Resource
 {
 }

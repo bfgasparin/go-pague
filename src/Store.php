@@ -2,7 +2,7 @@
 
 namespace GoPague;
 
-class Store extends Model
+class Store extends Resource
 {
     public static function all()
     {

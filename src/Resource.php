@@ -5,7 +5,7 @@ namespace GoPague;
 use GoPague\InvalidArgumentException;
 use GuzzleHttp\Client as HttpClient;
 
-abstract class Model
+abstract class Resource
 {
     protected $attributes = [];
 

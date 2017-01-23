@@ -2,7 +2,7 @@
 
 namespace GoPague;
 
-class Bank extends Model
+class Bank extends Resource
 {
     public static function all()
     {

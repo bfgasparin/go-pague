@@ -6,7 +6,7 @@ namespace GoPague;
  * GoPague Entry point
  *
  */
-class Credential extends Model
+class Credential extends Resource
 {
     public $token;
     public $userId;

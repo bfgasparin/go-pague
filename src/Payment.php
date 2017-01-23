@@ -2,7 +2,7 @@
 
 namespace GoPague;
 
-class Payment extends Model
+class Payment extends Resource
 {
     public static function create(array $data)
     {

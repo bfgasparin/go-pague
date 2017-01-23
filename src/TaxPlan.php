@@ -2,7 +2,7 @@
 
 namespace GoPague;
 
-class TaxPlan extends Model
+class TaxPlan extends Resource
 {
     public static function all()
     {

@@ -5,9 +5,9 @@ namespace GoPague;
 /**
  * Represents a GoPague Client
  *
- * @see Model
+ * @see Resource
  */
-class Client extends Model
+class Client extends Resource
 {
     /**
      * Creates a new Client on GoPague service
