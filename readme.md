@@ -95,3 +95,6 @@ Or to run an individual test file:
 ./vendor/bin/phpunit tests/SomeTest.php
 ```
 
+## License
+
+The GoPague PHP Library is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
