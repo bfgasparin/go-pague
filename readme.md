@@ -89,12 +89,6 @@ Install dependencies as mentioned above (which will resolve [PHPUnit](http://pac
 ./vendor/bin/phpunit
 ```
 
-Or to run an individual test file:
-
-```bash
-./vendor/bin/phpunit tests/SomeTest.php
-```
-
 ## License
 
 The GoPague PHP Library is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
