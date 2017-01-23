@@ -30,6 +30,47 @@ If you use Composer, these dependencies should be handled automatically. If you 
 
 ## Getting Started
 
+First you need set the email and password of the user to login to Go Pague API.
+
+```php
+GoPague\GoPague::setEmail('myemail@foo.bar')
+GoPague\GoPague::setPassword('secret');
+```
+
+Now you can use the resource binding classes to interact with Go Pague API.
+
+```php
+// gets the list of banks
+$banks = GoPague\Bank::all();
+```
+
+> **Note**: See `Resource Binding Classes` section to know all classes and methods available.
+
+The binding classes will automatically use the previous given email and password to login
+and autenticate to the API before the first API request.
+
+But if you want to autenticate to API manually, just use:
+
+```php
+$credentials = GoPague\GoPague::login('myemail@foo', 'secret');
+
+// gets the list of banks
+$banks = GoPague\Bank::all();
+// ...
+```
+
+You can access the Logged User data any time just calling the method:
+
+```php
+$credencials = GoPague::credentials();
+
+echo $credentials->token;   // the Authenticated Token
+echo $credentials->userId;   // the Authenticted User Id
+echo $credentials->clientIds;   // The client ids linked to the Authenticted User
+```
+
+## Resource Binding Classes
+
 @todo
 
 ## Development
