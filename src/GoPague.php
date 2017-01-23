@@ -26,15 +26,13 @@ use Psr\Http\Message\ResponseInterface;
  */
 class GoPague
 {
-    const API_ENDPOINT = 'http://portal-staging.redepagnet.com/api/';
-
-    /* const API_ENDPOINT = 'https://private-56fc7-pagnet2.apiary-mock.com'; */
-
     protected $httpClient;
     protected $credential;
 
     protected static $email;
     protected static $password;
+
+    protected static $baseUri = 'http://portal-staging.redepagnet.com/api/';
 
     /**
      * @var array  Credenciais for GoPague Staging environment
@@ -81,6 +79,16 @@ class GoPague
         static::$password = $password;
     }
 
+    /**
+     * Set API Base URI
+     *
+     * @param string $baseUri
+     * @return self
+     */
+    public static function setBaseUri(string $baseUri)
+    {
+        static::$baseUri = $baseUri;
+    }
 
     /**
      * Login to Go Pague API with the given parameters.
@@ -88,7 +96,7 @@ class GoPague
      * self::credencials()
      * @see self::credential()
      *
-     * After call this method, you can request other endpoints
+     * After call this method, you can request other resources
      * that GoPague will automatically use the autenticated credentials.
      *
      * @example:
@@ -134,7 +142,11 @@ class GoPague
      */
     public static function login(string $email, string $password) : Credential
     {
-        static::$instance = new static(new HttpClient());
+        static::$instance = new static(
+            new HttpClient(
+                ['base_uri' => static::$baseUri]
+            )
+        );
 
         return static::$instance->attemptLogin($email, $password);
     }
@@ -196,10 +208,10 @@ class GoPague
 
         // make the request
         try {
-            $request = new Request($method, self::API_ENDPOINT.$uri, $headers, $body);
+            $request = new Request($method, $uri, $headers, $body);
             var_dump($request->getHeaders());
             $response = $this->httpClient->send($request, $options);
-
+            
             return json_decode(
                 $response->getBody()->getContents(),
                 true
