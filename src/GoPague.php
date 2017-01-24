@@ -226,7 +226,7 @@ class GoPague
         try {
             $request = new Request($method, $uri, $headers, $body);
             $response = $this->httpClient->send($request, $options);
-            
+
             return json_decode(
                 $response->getBody()->getContents(),
                 true
@@ -263,7 +263,7 @@ class GoPague
         if (!static::$instance) {
             self::login(static::$email, static::$password);
         }
-        
+
         return call_user_func_array([static::$instance, $method], $parameters);
     }
 
