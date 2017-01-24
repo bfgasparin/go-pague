@@ -19,9 +19,9 @@ use Psr\Http\Message\ResponseInterface;
  *
  *    // login to API (following API calls will use the returned autenticated credenciais
  *    GoPague::login($email, $passord);
- *    // get all departaments (already use credencials)
+ *    // get all departaments (already use credentials)
  *    GoPague::get('departaments');
- *    // create a new client (already use credencials)
+ *    // create a new client (already use credentials)
  *    GoPague::post('clients', $data);
  */
 class GoPague
@@ -39,7 +39,7 @@ class GoPague
     /**
      * @var array  Credenciais for GoPague Staging environment
      */
-    protected static $stagingCredencials;
+    protected static $stagingCredentials;
     protected static $instance;
 
     public function __construct(HttpClient $httpClient)
@@ -67,11 +67,11 @@ class GoPague
      */
     public static function setStagingCredentials(string $username, string $password)
     {
-        static::$stagingCredencials = compact('username', 'password');
+        static::$stagingCredentials = compact('username', 'password');
     }
 
     /**
-     * Set the password field from credencial
+     * Set the password field from credential
      *
      * @param string $password
      * @return self
@@ -108,7 +108,7 @@ class GoPague
     /**
      * Login to Go Pague API with the given parameters.
      * If success the authenticated token is achieved with
-     * self::credencials()
+     * self::credentials()
      * @see self::credential()
      *
      * After call this method, you can request other resources
@@ -117,9 +117,9 @@ class GoPague
      * @example:
      *
      *    $goPague->login($email, $passord);
-     *    // get all departaments (already use credencials)
+     *    // get all departaments (already use credentials)
      *    $goPague->get('departaments');
-     *    // create a new client (already use credencials)
+     *    // create a new client (already use credentials)
      *    $goPague->post('clients', $data);
      *
      * @param string $email
@@ -134,11 +134,11 @@ class GoPague
      * If authenticated, returns the authenticated credenciais,
      * otherwise returns null
      *
-     * @return Credencial|null
+     * @return credential|null
      */
-    public function credencial()
+    public function credential()
     {
-        return $this->credencial;
+        return $this->credential;
     }
 
 
@@ -178,17 +178,17 @@ class GoPague
      * @example:
      *
      *    $goPague->login($email, $passord);
-     *    // get all departaments (uses auth credencials)
+     *    // get all departaments (uses auth credentials)
      *    $goPague->requestServer('get', 'departaments');
-     *    // create a new client (uses auth credencials)
+     *    // create a new client (uses auth credentials)
      *    $goPague->requestServer('post', 'clients', $data);
      *
      *    Or you can the magic method of GoPague that
      *    represents the HTTP METHODs (get, post, put, head, delete, ...)
      *
-     *    // get all departaments (uses auth credencials)
+     *    // get all departaments (uses auth credentials)
      *    $goPague->get('departaments');
-     *    // create a new client (uses auth credencials)
+     *    // create a new client (uses auth credentials)
      *    $goPague->post(clients', $data);
      *
      * @param string $method  The HTTP method to use
@@ -217,9 +217,9 @@ class GoPague
          *
          * It lets Authentcation header for the Token authentication
          */
-        if ($method === 'get' && static::$stagingCredencials) {
-            $headers['HTTP_BASIC_AUTH_USER'] = static::$stagingCredencials['username'];
-            $headers['HTTP_BASIC_AUTH_PASSWORD'] = static::$stagingCredencials['password'];
+        if ($method === 'get' && static::$stagingCredentials) {
+            $headers['HTTP_BASIC_AUTH_USER'] = static::$stagingCredentials['username'];
+            $headers['HTTP_BASIC_AUTH_PASSWORD'] = static::$stagingCredentials['password'];
         }
 
         // make the request
