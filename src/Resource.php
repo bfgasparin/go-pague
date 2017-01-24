@@ -57,14 +57,18 @@ abstract class Resource
     {
         $collection = GoPague::get($uri);
         $identifier = isset(static::$identifier) ? static::$identifier : $uri;
-
-        return array_map(
-            function ($object) {
-                return self::instanceFrom(
-                    $object
-                );
-            },
-            $collection[$identifier]
-        );
+    
+        if(!empty($collection)) {
+            return array_map(
+                function ($object) {
+                    return self::instanceFrom(
+                        $object
+                    );
+                },
+                $collection[$identifier]
+            );
+        }else{
+            return [];
+        }
     }
 }

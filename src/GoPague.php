@@ -263,12 +263,8 @@ class GoPague
         if (!static::$instance) {
             self::login(static::$email, static::$password);
         }
-
-        list($uri, $body) = $parameters;
-        return static::$instance->$method(
-            $uri,
-            $body
-        );
+        
+        return call_user_func_array([static::$instance, $method], $parameters);
     }
 
     /**
@@ -294,7 +290,8 @@ class GoPague
      */
     public function __call(string $method, array $parameters)
     {
-        list($uri, $body) = $parameters;
+        list($uri, $body) = array_pad($parameters, 2, null);
+
         $body = !is_null($body) ? json_encode($body) : null;
 
         return $this->requestServer(
