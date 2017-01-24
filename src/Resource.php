@@ -37,7 +37,7 @@ abstract class Resource
         if (!array_key_exists($key, $this->attributes)) {
             throw new InvalidArgumentException("The {self::class} has not the {$key} attribute");
         }
-        
+
         return $this->attributes[$key];
     }
 
@@ -57,7 +57,7 @@ abstract class Resource
     {
         $collection = GoPague::get($uri);
         $identifier = isset(static::$identifier) ? static::$identifier : $uri;
-    
+
         if(!empty($collection)) {
             return array_map(
                 function ($object) {
@@ -71,4 +71,15 @@ abstract class Resource
             return [];
         }
     }
+
+    /**
+     * Returns the string representation of the resource
+     *
+     * @return string
+     */
+    public function __toString() : string
+    {
+        return json_encode($this->attributes);
+    }
+
 }
