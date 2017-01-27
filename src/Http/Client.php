@@ -29,8 +29,6 @@ class Client
 {
     use ProxyMethods;
 
-    const BASE_URI = 'http://portal.redepagnet.com/api/';
-
     protected $httpClient;
     public $credential;
 

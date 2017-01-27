@@ -19,6 +19,8 @@ use GuzzleHttp\Client as HttpClient;
  */
 trait ProxyMethods
 {
+    protected static $baseUri = 'http://portal.redepagnet.com/api/';
+
     protected static $email;
     protected static $password;
 
@@ -99,7 +101,7 @@ trait ProxyMethods
     public static function login(string $email, string $password) : Credential
     {
         $httpConfig = is_null(static::$httpConfig) ?
-            ['base_uri' => self::BASE_URI] :
+            ['base_uri' => static::$baseUri] :
             static::$httpConfig
         ;
 
