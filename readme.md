@@ -62,11 +62,11 @@ $banks = GoPague\Bank::all();
 You can access the Logged User data any time just calling the method:
 
 ```php
-$credencials = GoPague::credentials();
+$credencial = GoPague::credential();
 
-echo $credentials->token;   // the Authenticated Token
-echo $credentials->userId;   // the Authenticted User Id
-echo $credentials->clientIds;   // The client ids linked to the Authenticted User
+echo $credential->token;   // the Authenticated Token
+echo $credential->userId;   // the Authenticated User Id
+echo $credential->clientIds;   // The client ids linked to the Authenticted User
 ```
 
 ## Resource Binding Classes

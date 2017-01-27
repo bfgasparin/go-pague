@@ -7,6 +7,8 @@ use GuzzleHttp\Client as HttpClient;
 
 abstract class Resource
 {
+    use InteractsWithAPI;
+
     protected $attributes = [];
 
 
@@ -41,35 +43,9 @@ abstract class Resource
         return $this->attributes[$key];
     }
 
-    protected static function request(string $method, string $uri, array $data = null) : self
-    {
-        return self::instanceFrom(
-            GoPague::$method($uri, $data)
-        );
-    }
-
     protected static function instanceFrom(array $data) : self
     {
         return new static($data);
-    }
-
-    protected static function requestAll(string $uri) : array
-    {
-        $collection = GoPague::get($uri);
-        $identifier = isset(static::$identifier) ? static::$identifier : $uri;
-
-        if(!empty($collection)) {
-            return array_map(
-                function ($object) {
-                    return self::instanceFrom(
-                        $object
-                    );
-                },
-                $collection[$identifier]
-            );
-        }else{
-            return [];
-        }
     }
 
     /**

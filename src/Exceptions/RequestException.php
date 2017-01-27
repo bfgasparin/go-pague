@@ -14,18 +14,9 @@ class RequestException extends GoPagueException
     protected $response;
     protected $request;
 
-    public function __construct(
-        $message,
-        RequestInterface $request,
-        ResponseInterface $response = null
-    ) {
-        // Set the code of the exception if the response is set and not future.
-        $code = $response && !($response instanceof PromiseInterface)
-            ? $response->getStatusCode()
-            : 0
-        ;
-
-        parent::__construct($message, $code);
+    public function __construct($message, RequestInterface $request, ResponseInterface $response)
+    {
+        parent::__construct($message, $response->getStatusCode());
         $this->request = $request;
         $this->response = $response;
     }
@@ -39,15 +30,7 @@ class RequestException extends GoPagueException
         );
     }
 
-    public static function couldNotConnectToService(RequestInterface $request, Exception $e) : self
-    {
-        return new static(
-            'Error conecting to Go Pague Server: ' . $e->getMessage(),
-            $request
-        );
-    }
-
-    public function response()
+    public function response() : ResponseInterface
     {
         return $this->response;
     }

@@ -3,12 +3,13 @@
 namespace GoPague;
 
 use GoPague\Credential;
+use GoPague\Exceptions\ConnectionException;
+use GoPague\Exceptions\RequestException as RequestException;
 use GoPague\Exceptions\ResourceNotFoundException;
-use GoPague\Exceptions\RequestException as GoPagueRequestException;
 use GoPague\Exceptions\ValidationException;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\RequestException as GuzzleRequestException;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
 
@@ -29,7 +30,7 @@ class GoPague
     const BASE_URI = 'http://portal-staging.redepagnet.com/api/';
 
     protected $httpClient;
-    protected $credential;
+    public $credential;
 
     protected static $email;
     protected static $password;
@@ -136,9 +137,9 @@ class GoPague
      *
      * @return credential|null
      */
-    public function credential()
+    public static function credential()
     {
-        return $this->credential;
+        return static::$instance->credential;
     }
 
 
@@ -244,11 +245,11 @@ class GoPague
             } elseif ($response->getStatusCode() == 404) {
                 throw new ResourceNotFoundException($e->getMessage(), $e->getRequest(), $e->getResponse());
             }
-            throw GoPagueRequestException::serviceRespondedWithAnError($e->getRequest(), $e->getResponse(), $e);
+            throw RequestException::serviceRespondedWithAnError($e->getRequest(), $e->getResponse(), $e);
         } catch (ConnectException $e) {
-            throw GoPagueRequestException::couldNotConnectToService($e->getRequest(), $e);
-        } catch (RequestException $e) {
-            throw GoPagueRequestException::serviceRespondedWithAnError($e->getRequest(), $e->getResponse(), $e);
+            throw ConnectionException::couldNotConnectToService($e->getRequest(), $e);
+        } catch (GuzzleRequestException $e) {
+            throw RequestException::serviceRespondedWithAnError($e->getRequest(), $e->getResponse(), $e);
         }
     }
 
