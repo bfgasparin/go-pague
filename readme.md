@@ -33,8 +33,8 @@ If you use Composer, these dependencies should be handled automatically. If you 
 First you need set the email and password of the user to login to Go Pague API.
 
 ```php
-GoPague\GoPague::setEmail('myemail@foo.bar')
-GoPague\GoPague::setPassword('secret');
+GoPague\Http\Client::setEmail('myemail@foo.bar')
+GoPague\Http\Client::setPassword('secret');
 ```
 
 Now you can use the resource binding classes to interact with Go Pague API.
@@ -52,7 +52,7 @@ and autenticate to the API before the first API request.
 But if you want to autenticate to API manually, just use:
 
 ```php
-$credential = GoPague\GoPague::login('myemail@foo', 'secret');
+$credential = GoPague\Http\Client::login('myemail@foo', 'secret');
 
 // gets the list of banks
 $banks = GoPague\Bank::all();
@@ -62,7 +62,7 @@ $banks = GoPague\Bank::all();
 You can access the Logged User data any time just calling the method:
 
 ```php
-$credencial = GoPague::credential();
+$credencial = GoPague\Http\Client::credential();
 
 echo $credential->token;   // the Authenticated Token
 echo $credential->userId;   // the Authenticated User Id

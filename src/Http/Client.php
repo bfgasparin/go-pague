@@ -1,6 +1,6 @@
 <?php
 
-namespace GoPague;
+namespace GoPague\Http;
 
 use GoPague\Credential;
 use GoPague\Exceptions\ConnectionException;
@@ -14,95 +14,29 @@ use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * GoPague API Wrapper.
+ * GoPague API Client.
  *
  * Use to authenticate and make requests to GoPague API:
  *
  *    // login to API (following API calls will use the returned autenticated credenciais
- *    GoPague::login($email, $passord);
+ *    Client::login($email, $passord);
  *    // get all departaments (already use credentials)
- *    GoPague::get('departaments');
+ *    Client::get('departaments');
  *    // create a new client (already use credentials)
- *    GoPague::post('clients', $data);
+ *    Client::post('clients', $data);
  */
-class GoPague
+class Client
 {
-    const BASE_URI = 'http://portal-staging.redepagnet.com/api/';
+    use ProxyMethods;
+
+    const BASE_URI = 'http://portal.redepagnet.com/api/';
 
     protected $httpClient;
     public $credential;
 
-    protected static $email;
-    protected static $password;
-
-    protected static $httpConfig = null;
-
-    /**
-     * @var array  Credenciais for GoPague Staging environment
-     */
-    protected static $stagingCredentials;
-    protected static $instance;
-
     public function __construct(HttpClient $httpClient)
     {
         $this->httpClient = $httpClient;
-    }
-
-    /**
-     * Set the email field from credential
-     *
-     * @param string $email
-     * @return self
-     */
-    public static function setEmail(string $email)
-    {
-        static::$email = $email;
-    }
-
-    /**
-     * Set the email field from credential
-     *
-     * @param string $email
-     * @return self
-     */
-    public static function setStagingCredentials(string $username, string $password)
-    {
-        static::$stagingCredentials = compact('username', 'password');
-    }
-
-    /**
-     * Set the password field from credential
-     *
-     * @param string $password
-     * @return self
-     */
-    public static function setPassword(string $password)
-    {
-        static::$password = $password;
-    }
-
-    /**
-     * Set API Base URI
-     *
-     * @param string $baseUri
-     * @return self
-     */
-    public static function setBaseUri(string $baseUri)
-    {
-        static::$baseUri = $baseUri;
-    }
-
-    /**
-     * Set Http Config from Guzzle Client
-     *
-     * @see GuzzleHttp\Client
-     *
-     * @param string $baseUri
-     * @return self
-     */
-    public static function setHttpConfig(array $config)
-    {
-        static::$httpConfig = $config;
     }
 
     /**
@@ -116,11 +50,11 @@ class GoPague
      *
      * @example:
      *
-     *    $goPague->login($email, $passord);
+     *    $client->login($email, $passord);
      *    // get all departaments (already use credentials)
-     *    $goPague->get('departaments');
+     *    $client->get('departaments');
      *    // create a new client (already use credentials)
-     *    $goPague->post('clients', $data);
+     *    $client->post('clients', $data);
      *
      * @param string $email
      * @param string $password
@@ -131,44 +65,6 @@ class GoPague
     }
 
     /**
-     * If authenticated, returns the authenticated credenciais,
-     * otherwise returns null
-     *
-     * @return credential|null
-     */
-    public static function credential()
-    {
-        return static::$instance->credential;
-    }
-
-
-    /**
-     * Logins to Go Pague API.
-     * Static easy access to self::attemptLogin.
-     *
-     * @usage
-     *    GoPague::login($email, $password);
-     *
-     * @see self::attemptLogin
-     *
-     * @param  string  $method
-     * @param  array  $parameters
-     * @return Credential
-     */
-    public static function login(string $email, string $password) : Credential
-    {
-        $httpConfig = is_null(static::$httpConfig) ?
-            ['base_uri' => self::BASE_URI] :
-            static::$httpConfig
-        ;
-
-        static::$instance = new static(new HttpClient($httpConfig));
-
-        return static::$instance->attemptLogin($email, $password);
-    }
-
-
-    /**
      * Make a Request to Go Pague Server and returns a Go Pague
      * respective object
      *
@@ -177,19 +73,19 @@ class GoPague
      *
      * @example:
      *
-     *    $goPague->login($email, $passord);
+     *    $client->login($email, $passord);
      *    // get all departaments (uses auth credentials)
-     *    $goPague->requestServer('get', 'departaments');
+     *    $client->requestServer('get', 'departaments');
      *    // create a new client (uses auth credentials)
-     *    $goPague->requestServer('post', 'clients', $data);
+     *    $client->requestServer('post', 'clients', $data);
      *
      *    Or you can the magic method of GoPague that
      *    represents the HTTP METHODs (get, post, put, head, delete, ...)
      *
      *    // get all departaments (uses auth credentials)
-     *    $goPague->get('departaments');
+     *    $client->get('departaments');
      *    // create a new client (uses auth credentials)
-     *    $goPague->post(clients', $data);
+     *    $client->post(clients', $data);
      *
      * @param string $method  The HTTP method to use
      * @param string $uri     The uri to use
@@ -209,17 +105,6 @@ class GoPague
         // fill data according to the enviroment
         if ($this->credential) {
             $headers['AUTHORIZATION'] = 'Token token='.$this->credential->token;
-        }
-
-        /**
-         * Go Pague ues explict headers to authenticate using HTTP Basic Auth,
-         * instead od the Authentication header.
-         *
-         * It lets Authentcation header for the Token authentication
-         */
-        if ($method === 'get' && static::$stagingCredentials) {
-            $headers['HTTP_BASIC_AUTH_USER'] = static::$stagingCredentials['username'];
-            $headers['HTTP_BASIC_AUTH_PASSWORD'] = static::$stagingCredentials['password'];
         }
 
         // make the request
@@ -253,32 +138,17 @@ class GoPague
     }
 
     /**
-     * Handle dynamic static method calls into the method to redirect
-     * to self::requestServer.
-     * Same as self::__call, but statically.
-     * @see self::__call
-     */
-    public static function __callStatic(string $method, array $parameters)
-    {
-        if (!static::$instance) {
-            self::login(static::$email, static::$password);
-        }
-
-        return call_user_func_array([static::$instance, $method], $parameters);
-    }
-
-    /**
      * Handle dynamic method calls to redirect to self::requestServer.
      *
      * A call to:
-     *    $goPague->get('departaments');
+     *    $client->get('departaments');
      * Is equivalent to:
-     *    $goPague->requestServer('get', 'departaments');
+     *    $client->requestServer('get', 'departaments');
      *
      * A call to:
-     *    $goPague->post(clients', $data);
+     *    $client->post(clients', $data);
      * Is equivalent to:
-     *    $goPague->requestServer('post', 'clients', $data);
+     *    $client->requestServer('post', 'clients', $data);
      *
      * And so on ...
      *
