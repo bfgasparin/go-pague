@@ -9,7 +9,7 @@ use GuzzleHttp\Client as HttpClient;
  * Contains static methods to help Resource classes to
  * create helper methods to interact with the GoPague API
  */
-trait class InteractsWithAPI
+trait InteractsWithAPI
 {
     protected static function request(string $method, string $uri, array $data = null) : self
     {

@@ -46,7 +46,6 @@ class GoPague
     public function __construct(HttpClient $httpClient)
     {
         $this->httpClient = $httpClient;
-        $this->apiToken = null;
     }
 
     /**

@@ -52,7 +52,7 @@ and autenticate to the API before the first API request.
 But if you want to autenticate to API manually, just use:
 
 ```php
-$credentials = GoPague\GoPague::login('myemail@foo', 'secret');
+$credential = GoPague\GoPague::login('myemail@foo', 'secret');
 
 // gets the list of banks
 $banks = GoPague\Bank::all();
