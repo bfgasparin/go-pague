@@ -13,7 +13,7 @@ trait InteractsWithAPI
 {
     protected static function request(string $method, string $uri, array $data = null) : self
     {
-        return self::instanceFrom(
+        return static::instanceFrom(
             GoPagueClient::$method($uri, $data)
         );
     }
@@ -28,7 +28,7 @@ trait InteractsWithAPI
         if(!empty($collection)) {
             return array_map(
                 function ($object) {
-                    return self::instanceFrom(
+                    return static::instancefrom(
                         $object
                     );
                 },
