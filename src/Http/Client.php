@@ -8,6 +8,7 @@ use GoPague\Exceptions\RequestException as RequestException;
 use GoPague\Exceptions\ResourceNotFoundException;
 use GoPague\Exceptions\ValidationException;
 use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException as GuzzleRequestException;
 use GuzzleHttp\Psr7\Request;
