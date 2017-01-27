@@ -50,7 +50,7 @@ class Client
      *
      * @example:
      *
-     *    $client->login($email, $passord);
+     *    $credential = $client->attemptLogin($email, $passord);
      *    // get all departaments (already use credentials)
      *    $client->get('departaments');
      *    // create a new client (already use credentials)
