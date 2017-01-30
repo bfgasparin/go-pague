@@ -14,7 +14,7 @@ class Payment extends Resource
         return static::request(
             'post',
             "payment_collections/{$uuid}/approve",
-            ['cpf_cnpj' => $document]
+            ['payment_collections' => ['cpf_cnpj' => $document]]
         );
     }
 
