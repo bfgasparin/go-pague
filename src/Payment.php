@@ -15,6 +15,7 @@ class Payment extends Resource
             'post',
             "payment_collections/{$uuid}/approve",
             ['cpf_cnpj' => $document]
+        );
     }
 
 }
