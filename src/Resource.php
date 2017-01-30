@@ -57,5 +57,4 @@ abstract class Resource
     {
         return json_encode($this->attributes);
     }
-
 }

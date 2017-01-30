@@ -21,6 +21,10 @@ class Client extends Resource
         return static::request('post', 'clients', $data);
     }
 
+    public static function search(string $param)
+    {
+        return static::request('get', 'clients/search?q='.$param);
+    }
 
     /**
      * Gets the balance of a the client

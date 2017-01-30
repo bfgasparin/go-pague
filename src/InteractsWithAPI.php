@@ -11,11 +11,13 @@ use GoPague\InvalidArgumentException;
  */
 trait InteractsWithAPI
 {
-    protected static function request(string $method, string $uri, array $data = null) : self
+    protected static function request(string $method, string $uri, array $data = null)
     {
-        return static::instanceFrom(
-            GoPagueClient::$method($uri, $data)
-        );
+        if ($attributes = GoPagueClient::$method($uri, $data)) {
+            return static::instanceFrom($attributes);
+        };
+
+        return null;
     }
 
     protected static abstract function instanceFrom(array $data) : self;
