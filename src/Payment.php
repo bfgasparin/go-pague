@@ -9,12 +9,12 @@ class Payment extends Resource
         return static::request('post', 'payment_collections', $data);
     }
 
-    public function approve($document)
+    public static function approve(string $uuid, string $document)
     {
         return static::request(
             'post',
-            "payment_collections/{$this->uuid}/approve",
+            "payment_collections/{$uuid}/approve",
             ['cpf_cnpj' => $document]
-        );
     }
+
 }
