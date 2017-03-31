@@ -6,6 +6,6 @@ class Store extends Resource
 {
     public static function all()
     {
-        return static::request('get', 'stores');
+        return static::requestAll('stores');
     }
 }

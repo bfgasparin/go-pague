@@ -2,7 +2,7 @@
 
 namespace GoPague\Exceptions;
 
-use InvalidArgumentException;
+use InvalidArgumentException as BaseInvalidArgumentException;
 
 /**
  * InvalidArgumentException for GoPague

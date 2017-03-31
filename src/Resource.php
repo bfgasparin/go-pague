@@ -2,10 +2,11 @@
 
 namespace GoPague;
 
-use GoPague\InvalidArgumentException;
+use GoPague\Exceptions\InvalidArgumentException;
 use GuzzleHttp\Client as HttpClient;
+use GoPague\Support\Arrayable;
 
-abstract class Resource
+abstract class Resource implements Arrayable
 {
     use InteractsWithAPI;
 
@@ -36,8 +37,9 @@ abstract class Resource
      */
     public function getAttribute($key)
     {
+        $className = self::class;
         if (!array_key_exists($key, $this->attributes)) {
-            throw new InvalidArgumentException("The {self::class} has not the {$key} attribute");
+            throw new InvalidArgumentException("The {$className} has not the {$key} attribute");
         }
 
         return $this->attributes[$key];
@@ -56,5 +58,15 @@ abstract class Resource
     public function __toString() : string
     {
         return json_encode($this->attributes);
+    }
+
+    /**
+     * Returns the array representation of the resource
+     *
+     * @return array
+     */
+    public function toArray() : array
+    {
+        return $this->attributes;
     }
 }
