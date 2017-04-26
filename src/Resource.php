@@ -37,9 +37,9 @@ abstract class Resource implements Arrayable
      */
     public function getAttribute($key)
     {
-        $className = self::class;
+        $class = static::class;
         if (!array_key_exists($key, $this->attributes)) {
-            throw new InvalidArgumentException("The {$className} has not the {$key} attribute");
+            throw new InvalidArgumentException("The {$class} has not an {$key} attribute");
         }
 
         return $this->attributes[$key];
