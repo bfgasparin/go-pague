@@ -34,7 +34,9 @@ trait InteractsWithAPI
                         $object
                     );
                 },
-                $collection[$identifier]
+                // some get requests does not have an identifier, so
+                // filter by an identifier only if needed
+                empty($identifier) ? $collection : $collection[$identifier]
             );
         }else{
             return [];

@@ -9,6 +9,8 @@ namespace GoPague;
  */
 class Client extends Resource
 {
+    protected static $identifier = '';
+
     /**
      * Creates a new Client on GoPague service
      *
@@ -23,7 +25,7 @@ class Client extends Resource
 
     public static function search(string $param)
     {
-        return static::request('get', 'clients/search?q='.$param);
+        return static::requestAll('clients/search?q='.$param);
     }
 
     /**
