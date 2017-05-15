@@ -37,6 +37,6 @@ class Client extends Resource
      */
     public static function getBalance(int $clientId) : Balance
     {
-        return static::request('get', 'clients/'.$clientId.'/current_balance');
+        return Balance::find($clientId);
     }
 }

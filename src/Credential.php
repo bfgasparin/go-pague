@@ -18,7 +18,7 @@ class Credential extends Resource
         $this->userId = $attributes['user_id'] ?? null;
         $this->clientIds = $attributes['client_ids'] ?? null;
     }
-    
+
     public static function create(string $email, string $password) : self
     {
         return static::request(
